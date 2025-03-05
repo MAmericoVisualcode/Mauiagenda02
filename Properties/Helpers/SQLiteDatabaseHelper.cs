@@ -20,9 +20,13 @@ namespace Mauiagenda02.Properties.Helpers
             return _conn.InsertAsync(p);
         }
 
-        public async Task<int> Update(Produto p)
+        public Task<List<Produto>> Update(Produto p)
         {
-            return await _conn.UpdateAsync(p);
+            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?";
+
+            return _conn.QueryAsync<Produto>(
+                sql, p.Descricao, p.Quantidade, p.Preco, p.Id
+            );
         }
 
         public Task<int> Delete(int id)
@@ -37,8 +41,9 @@ namespace Mauiagenda02.Properties.Helpers
 
         public Task<List<Produto>> Search(string q)
         {
-            string sql = "SELECT * FROM Produto WHERE Descricao LIKE ?";
-            return _conn.QueryAsync<Produto>(sql, "%" + q + "%");
+            string sql = "SELECT * Produto WHERE descricao LIKE '%" + q + "%'";
+
+            return _conn.QueryAsync<Produto>(sql);
         }
     }
 }
